@@ -1,7 +1,13 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
-import { toast } from 'react-toastify';
-import { api } from '../services/api';
-import { Product, Stock } from '../types';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+import { toast } from "react-toastify";
+import { api } from "../services/api";
+import { Product, Stock } from "../types";
 
 interface CartProviderProps {
   children: ReactNode;
@@ -22,22 +28,37 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
-  const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
+  const [data, setData] = useState<Product[]>([]);
 
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
+  const [cart, setCart] = useState<Product[]>(() => {
+    const storagedCart = localStorage.getItem("@RocketShoes:cart");
+
+    if (storagedCart) {
+      return JSON.parse(storagedCart);
+    }
 
     return [];
   });
 
+  useEffect(() => {
+    api.get("products").then((response) => {
+      setData(response.data);
+    });
+  }, []);
+
   const addProduct = async (productId: number) => {
     try {
-      // TODO
+      data.map((product) => {
+        if (product.id !== productId) {
+          console.log("entrei");
+          setCart([...cart, product]);
+        }
+      });
     } catch {
       // TODO
     }
+
+    console.log(cart);
   };
 
   const removeProduct = (productId: number) => {
@@ -54,6 +75,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   }: UpdateProductAmount) => {
     try {
       // TODO
+
+      console.log("cheguei aqui", productId, amount);
     } catch {
       // TODO
     }
