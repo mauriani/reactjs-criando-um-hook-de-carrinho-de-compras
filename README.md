@@ -14,3 +14,10 @@ Essa será uma aplicação onde o seu principal objetivo é criar um hook de 
 - Exibição de mensagens de erro;
 - Entre outros.
 
+
+# Clonando o Projeto
+
+```jsx
+git clone https://github.com/mauriani/reactjs-criando-um-hook-de-carrinho-de-compras.git
+```
+
